@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ECF — Plateforme de pilotage agence</title>
+  <meta name="description" content="Tableau de bord temps réel de votre agence ECF : élèves, planning, encaissements et vue en direct de l'agence." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2218%22 fill=%22%23124483%22/%3E%3Ctext x=%2250%22 y=%2268%22 font-size=%2242%22 font-family=%22Arial Black,Arial%22 font-weight=%22900%22 fill=%22white%22 text-anchor=%22middle%22%3EECF%3C/text%3E%3Crect x=%2222%22 y=%2274%22 width=%2256%22 height=%227%22 rx=%223.5%22 fill=%22%23DA1F26%22/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
+</head>
+<body>
+  <!-- ============ TOPBAR ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-logo">ECF<span></span></div>
+      <div class="brand-name">
+        <strong>École de Conduite Française</strong>
+        <small>Plateforme de pilotage</small>
+      </div>
+    </div>
+    <nav class="topnav">
+      <button class="topnav-link active">Tableau de bord</button>
+      <button class="topnav-link">Élèves</button>
+      <button class="topnav-link">Planning</button>
+      <button class="topnav-link">Moniteurs</button>
+      <button class="topnav-link">Facturation</button>
+    </nav>
+    <div class="topbar-right">
+      <button class="icon-btn" title="Notifications">🔔<span class="notif-dot"></span></button>
+      <div class="user-chip">
+        <div class="avatar avatar-blue">MO</div>
+        <div class="user-meta">
+          <strong>Monssif</strong>
+          <small>Directeur d'agence</small>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <!-- ============ SALUTATION ============ -->
+    <section class="greeting">
+      <div>
+        <h1>Bonjour <span class="grad">Monssif.</span></h1>
+        <p class="greeting-sub"><span id="todayLabel">—</span> · <span id="clock">--:--</span></p>
+      </div>
+      <div class="agency-chip">📍 ECF Montgeron — Essonne (91) · Spécialiste poids lourds</div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="stats">
+      <article class="stat-card">
+        <div class="stat-top"><header>ÉLÈVES ACTIFS</header><span class="stat-icon">👥</span></div>
+        <div class="stat-value" data-count="412">0</div>
+        <div class="stat-foot">
+          <div class="stat-delta up">▲ 24 ce mois</div>
+          <svg class="spark" data-spark="8,11,10,14,13,17,16,20" data-color="#124483" viewBox="0 0 66 24" preserveAspectRatio="none"></svg>
+        </div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-top"><header>CA ENCAISSÉ</header><span class="stat-icon" style="--si:#e7f6ee">💶</span></div>
+        <div class="stat-value" data-count="48920" data-suffix=" €">0</div>
+        <div class="stat-foot">
+          <div class="stat-delta up">▲ 12% vs sept.</div>
+          <svg class="spark" data-spark="6,9,8,12,15,14,18,21" data-color="#12b76a" viewBox="0 0 66 24" preserveAspectRatio="none"></svg>
+        </div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-top"><header>RESTE À ENCAISSER</header><span class="stat-icon" style="--si:#fdf0e5">🧾</span></div>
+        <div class="stat-value" data-count="12380" data-suffix=" €">0</div>
+        <div class="stat-foot">
+          <div class="stat-delta neutral">34 dossiers en cours</div>
+          <svg class="spark" data-spark="14,12,15,11,13,10,12,9" data-color="#f36f30" viewBox="0 0 66 24" preserveAspectRatio="none"></svg>
+        </div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-top"><header>TAUX DE RÉUSSITE · EXAMEN PRATIQUE</header><span class="stat-icon" style="--si:#fce9e9">🎯</span></div>
+        <div class="stat-value" data-count="87" data-suffix=" %">0</div>
+        <div class="stat-foot">
+          <div class="stat-delta up">▲ 4 pts sur le trimestre</div>
+          <svg class="spark" data-spark="9,11,10,13,15,14,17,19" data-color="#da1f26" viewBox="0 0 66 24" preserveAspectRatio="none"></svg>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ VUE EN DIRECT + SIDEBAR ============ -->
+    <div class="main-grid">
+      <section class="card live-card">
+        <div class="card-head">
+          <div class="live-title">
+            <span class="rec-dot"></span> EN DIRECT
+            <span class="live-clock" id="liveClock">--:--</span>
+          </div>
+          <div class="live-controls">
+            <div class="cam-switch">
+              <button id="camPrev" title="Caméra précédente">‹</button>
+              <span id="camLabel">1/4</span>
+              <button id="camNext" title="Caméra suivante">›</button>
+            </div>
+            <div class="moto-badge">🚛 6/6</div>
+            <button class="agrandir" id="fullscreenBtn">⤢ Agrandir</button>
+          </div>
+        </div>
+        <div class="scene-wrap" id="sceneWrap">
+          <div class="scene-tooltip" id="sceneTooltip"></div>
+        </div>
+        <div class="live-foot">
+          <div class="foot-chip">🏢 Accueil · Sarah &amp; Mehdi</div>
+          <div class="foot-chip">🚛 Parc PL · 2/4 dispo</div>
+          <div class="foot-chip">🟠 Plateau manœuvres</div>
+        </div>
+      </section>
+
+      <aside class="side-col">
+        <section class="card">
+          <div class="card-head"><h3>Prochaines leçons</h3><span class="head-tag">aujourd'hui</span></div>
+          <ul class="lesson-list" id="lessonList"></ul>
+        </section>
+        <section class="card">
+          <div class="card-head"><h3>Examens cette semaine</h3><span class="head-tag" id="examCount">4</span></div>
+          <ul class="exam-list" id="examList"></ul>
+        </section>
+      </aside>
+    </div>
+
+    <!-- ============ GRAPHS ============ -->
+    <div class="bottom-grid">
+      <section class="card">
+        <div class="card-head"><h3>Heures de conduite — semaine en cours</h3><span class="head-tag">186 h au total</span></div>
+        <div class="bar-chart" id="barChart"></div>
+      </section>
+      <section class="card">
+        <div class="card-head"><h3>Taux de réussite</h3><span class="head-tag">T3 2026</span></div>
+        <div class="donut-row" id="donutRow"></div>
+      </section>
+      <section class="card">
+        <div class="card-head"><h3>Objectif du mois</h3><span class="head-tag">octobre</span></div>
+        <div class="goal">
+          <div class="goal-nums"><strong>48 920 €</strong><span>/ 63 000 €</span></div>
+          <div class="goal-bar"><div class="goal-fill" id="goalFill"></div></div>
+          <p class="goal-note">78% de l'objectif atteint — il reste 11 jours. 🚀</p>
+          <div class="goal-extra">
+            <div><strong>34</strong><small>inscriptions</small></div>
+            <div><strong>9</strong><small>permis obtenus</small></div>
+            <div><strong>4,9★</strong><small>avis Google</small></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
